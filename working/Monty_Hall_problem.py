@@ -57,12 +57,14 @@ def open_door(doors, choice_num, choice, i):
    if choice_num == i[0]:   
        del doors[i[1]], choice[i[1]]
        return doors
+   #caso in cui il giocatore ha scelto la seconda porta vuota. Elimino la prima 
    if choice_num == i[1]:
        
        del doors[i[0]], choice[i[0]]
        return doors
    
-   #caso in cui il giocatore ha scelto la seconda porta vuota. Elimino la prima 
+   #caso in cui il giocatore ha scelto la porta con il premio. 
+   #in questo caso, devo eliminare randomicamente una delle due porte vuote
    if x <= 0.5:
        del doors[i[0]], choice[i[0]]
        return doors
