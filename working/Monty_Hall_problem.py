@@ -9,34 +9,22 @@ import numpy as np
 
 # =============================================================================
 # FUNZIONE PER CREARE IN SEQUENZA: UN ARRAY DI N PORTE, L'INDICE CORRISPONDENTE
-# AL PREMIO E GLI INDICI CORRISPONDENTI ALLE PORTE VUOTE. L'ESPLICITARE IL NUMERO
-# DI PORTE MI PERMETTE DI USARE LA STESSA FUNZIONE SIA PER LA CREAZIONE DELLE PORTE
-# E LA SCELTA DEL PRIMO CONCORRENTE, SIA LA SCELTA DELL'ULTIMO ARRIVATO CHE NON
-# HA FUNZIONI A PRIORI
+# AL PREMIO (O ALLA PORTA SCELTA) E GLI INDICI CORRISPONDENTI ALLE PORTE VUOTE. 
+# L'ESPLICITARE IL NUMERO DI PORTE MI PERMETTE DI USARE LA STESSA FUNZIONE
+# PER I DIVERSI CASI
 # =============================================================================
 def select_door(N):
-    x = np.random.rand(1,1)
-    if N == 3:
-        
-        if x <= 0.33:
-            selected_door = [1,0,0]
-            index_door = 0
-            wrong_doors = [1,2]
-        elif x > 0.33 : 
-            if x <=0.66:
-                selected_door = [0,1,0]
-                index_door = 1
-                wrong_doors = [0,2]
-            else:
-                selected_door = [0,0,1]
-                index_door = 2
-                wrong_doors = [0,1]
-        return selected_door, index_door, wrong_doors
-    if N == 2:
-        if x <= 0.5:
-            return [1,0]
-        else:
-            return [0,1]
+    x = np.random.randint(0,N)
+    selected_door = np.zeros(N)
+    selected_door[x] = 1
+    i = 0
+    wrong_doors = []
+    #Ciclo while per salvare gli indici delle porte vuote
+    while i < N:
+        if i != x:
+            wrong_doors.append(i)
+        i = i+1
+    return list(selected_door), x, list(wrong_doors)
 
 # =============================================================================
 # FUNZIONE PER APRIRE UNA PORTA TRA QUELLE VUOTE. IN QUESTA FUNZIONE, DEVO
@@ -72,50 +60,61 @@ def open_door(doors, choice_num, choice, i):
        del doors[i[1]], choice[i[1]]
        return doors
 
-
-n = 0
 N_rip = 5000
-count_c, count_s, count_u = 0, 0, 0 #variabili per tenere i conteggi delle vittorie
-#per fare N_rip ripetizioni, faccio un ciclo while su n
-while n < N_rip:        
-    #salvo l'array delle porte, l'indice del premio e gli indici delle porte vuote
-    #per il presentatore e per il giocatore
-    porte, index_prize, index_loss = list(select_door(3))
-    porte_player, index_player, _ = list(select_door(3))
-    #scelgo una delle porte vuote e la apro, eliminandola di fatto
-    #da entrambe le liste delle porte del presentatore e del giocatore
-    porte = open_door(porte, index_player, porte_player, index_loss)
-    
-# =============================================================================
-# NOTA: DEVO TENER CONTO DELL'ELIMINAZIONE DI UN ELEMENTO DALLE LISTE DELLE
-# PORTE NEL CALCOLO DELL'INDICE A CUI SI TROVA IL PREMIO. LO RICALCOLO TRAMITE
-# LA NUOVA LISTA DELLE PORTE DEL PRESENTATORE 
-# =============================================================================
-    if porte[0] == 1:
-        index_prize = 0
-    else:
-        index_prize = 1
-    
-    #creo il secondo giocatore, che non ha l'informazione a priori
-    #a differenza del primo
-    last_player = list(select_door(2))
-    
-    #tengo il conto di chi ha scelto la porta giusta. Visto che se il giocatore
-    #conservativo vince, il giocatore che switcha perde e viceversa, non ho
-    #bisogno di creare un array per il secondo ma utilizzo sempre il primo.
-    if porte_player[index_prize] == 1:
-        count_c = count_c + 1
-    if porte_player[index_prize] == 0:
-        count_s = count_s + 1
-    if last_player[index_prize] == 1:
-        count_u = count_u + 1
-    n = n+1
+numero_porte = [3, 100] #per fare il caso con 3 o 100 porte iniziali
+for n_porte in numero_porte:
+    #per ogni numero di porte iniziali i dati di partenza devono essere a 0
+    n = 0   
+    count_c, count_s, count_u = 0, 0, 0
+    while n < N_rip:        
+        #salvo l'array delle porte, l'indice del premio e gli indici delle porte vuote
+        #per il presentatore e per il giocatore
+        porte, index_prize, index_loss = select_door(n_porte)
+        porte_player, index_player, _ = select_door(n_porte)
 
-#Stampa dei risultati (numero di vittorie)
-print('Il conservatore ha vinto: '+ str(count_c) +' volte')
-print('Lo switcher ha vinto: '+ str(count_s) +' volte')
-print('L\'ultimo arrivato ha vinto: ', str(count_u) + ' volte')
-#Stampa dei risultati (probabilità di vittoria)
-print('Il conservatore ha probabilità di vincere pari a: '+ str(count_c/N_rip))
-print('Lo switcher ha probabilità di vincere pari a: '+ str(count_s/N_rip))
-print('L\'ultimo arrivato ha probabilità di vincere pari a: ', str(count_u/N_rip))
+# =============================================================================
+# scelgo una delle porte vuote e la apro, eliminandola di fatto
+# da entrambe le liste delle porte del presentatore e del giocatore
+# ripeto ciò finché non rimango con 2 porte. 
+# =============================================================================
+# NOTA: DEVO TENER CONTO OGNI VOLTA DELL'ELIMINAZIONE DI UN ELEMENTO DALLE LISTE
+# PERCHÉ POTREBBE SPOSTARE L'INDICE DEL PREMIO. PER QUESTO, RICALCOLO LA POSIZIONE
+# DEL PREMIO TRAMITE LA NUOVA LISTA DELLE PORTE DEL PRESENTATORE 
+# =============================================================================
+        i = 0
+        while i < n_porte-2:
+            k = 0
+            porte = open_door(porte, index_player, porte_player, index_loss)
+            while k < n_porte-1-i:
+                if porte[k] == 1:
+                    index_prize = k
+                k = k+1
+            i = i+1
+        
+        #creo il secondo giocatore, che non ha l'informazione a priori
+        #a differenza del primo
+        last_player = select_door(2)[0]
+        
+        #tengo il conto di chi ha scelto la porta giusta. Visto che se il giocatore
+        #conservativo vince, il giocatore che switcha perde e viceversa, non ho
+        #bisogno di creare un array per il secondo ma utilizzo sempre il primo.
+        if porte_player[index_prize] == 1:
+            count_c = count_c + 1
+        if porte_player[index_prize] == 0:
+            count_s = count_s + 1
+        if last_player[index_prize] == 1:
+            count_u = count_u + 1
+        n = n+1
+    
+    #Stampa dei risultati (numero di vittorie)
+    if n_porte == 3:
+        print('CASO CON 3 PORTE:')
+    else:
+        print('\nCASO CON 100 PORTE:')
+    print('Il conservatore ha vinto: '+ str(count_c) +' volte')
+    print('Lo switcher ha vinto: '+ str(count_s) +' volte')
+    print('L\'ultimo arrivato ha vinto: ', str(count_u) + ' volte')
+    #Stampa dei risultati (probabilità di vittoria)
+    print('Il conservatore ha probabilità di vincere pari a: '+ str(count_c/N_rip))
+    print('Lo switcher ha probabilità di vincere pari a: '+ str(count_s/N_rip))
+    print('L\'ultimo arrivato ha probabilità di vincere pari a: ', str(count_u/N_rip))
