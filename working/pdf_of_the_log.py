@@ -17,11 +17,11 @@ plt.title('PDF for uniform distribution')
 plt.xlabel('x')
 plt.ylabel('PDF(x)')
 print(np.mean(np.log10(x)), np.median(np.log10(x)))
+print(np.log10(np.mean(x)), np.log10(np.median(x)))
 plt.show()
 
 #pdf per y = log10(x), partendo da una distribuzione uniforme
 y = np.log10(x)
-print(np.mean(y), np.median(y))
 plt.hist(y, bins = 100, density = True)
 plt.xlabel('y')
 plt.ylabel('PDF(y)')
@@ -36,8 +36,8 @@ plt.show()
 
 #pdf per y = e^x, partendo da una distribuzione uniforme
 print(np.mean(np.exp(x)), np.median(np.exp(x)))
+print(np.exp(np.mean(x)), np.exp(np.median(x)))
 y = np.exp(x)
-print(np.mean(y), np.median(y))
 plt.hist(y, bins = 100, density = True)
 plt.title(r'PDF for y = $e^{x}$, where x has a uniform distribution')
 plt.xlabel('y')
