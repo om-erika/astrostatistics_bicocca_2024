@@ -31,7 +31,7 @@ kurtois = stats.kurtosis(dati['number of deaths'])
 dist = poisson(mean)
 plt.plot(dati['number of deaths'], dist.pmf(dati['number of deaths']), label = r'$\mu$ = %0.2f' % mean)
 
-#i try fitting by hand (?) with different values of the mean
+#i try fitting by hand (is it what it means?) with different values of the mean
 means = np.linspace(0.1, 5, 11)
 for mu in means:
     #only because 2.06 is close to the mean I get from the datas
@@ -45,5 +45,18 @@ plt.title('Different poissonian fits for the datas')
 plt.show()
 
 # =============================================================================
-# Is it right that 0.59 is a better mu than the value i get from the mean? 
+# The reason why 0.59 is better than 2 as the value of the mean parameter 
+# is that I have to use the weighted mean, since the number of groups is different
+# In fact, the weighted mean is equal to 0.61
 # =============================================================================
+weighted_mean = np.average(dati['number of deaths'], weights = dati['frequency'])
+
+plt.scatter(dati['number of deaths'], dati['frequency'])
+
+dist = poisson(mean)
+plt.plot(dati['number of deaths'], dist.pmf(dati['number of deaths']), label = r'$\mu$ = %0.2f' % mean)
+
+dist = poisson(weighted_mean)
+plt.plot(dati['number of deaths'], dist.pmf(dati['number of deaths']), label = r'$\mu$ = %0.2f' % weighted_mean)
+plt.title('Poissonian fits with mean vs weighted mean')
+plt.show()

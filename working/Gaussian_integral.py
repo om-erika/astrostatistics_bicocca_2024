@@ -31,7 +31,6 @@ for s in sigma:
     plt.hist(draws)
     integral_1 = np.mean(function(draws))*np.sqrt(2*np.pi)*s/2
     
-    
     gauss = scipy.stats.halfnorm(loc = 0 , scale=s)
     draws = gauss.rvs(N)
     
