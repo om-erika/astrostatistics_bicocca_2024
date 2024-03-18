@@ -27,11 +27,12 @@ z_lin = np.linspace(min(z), max(z), 10000)
 
 #plot istogramma e cumulativa
 ax = plt.gca()
-plt.hist(z, bins = 100, density = True)
-ax.plot(z_lin, z_dist.pdf(z_lin))
+plt.hist(z, bins = 100, density = True, label = 'data')
+ax.plot(z_lin, z_dist.pdf(z_lin), label = 'pdf from rv.histogram')
 plt.title('z histogram')
 plt.xlabel('z')
 plt.ylabel('pdf(z)')
+plt.legend()
 plt.show()
 
 # =============================================================================
@@ -52,12 +53,13 @@ plt.show()
 #scelta dei punti validi e confronto con distribuzione iniziale
 goodpoints = x[y<z_dist.pdf(x)]
 ax = plt.gca()
-plt.hist(z, bins = 100, density = True)
-ax.plot(z_lin, z_dist.pdf(z_lin))
-plt.hist(goodpoints,bins=100,density=True,histtype='step', color = 'green')
-plt.title('Comparison between data and sampling')
+plt.hist(z, bins = 100, density = True, label = 'data')
+ax.plot(z_lin, z_dist.pdf(z_lin), label = 'pdf from rv.histogram')
+plt.hist(goodpoints,bins=100,density=True,histtype='step', color = 'green', label = 'pdf from rejection sampling')
+plt.title('Comparison between data and samples from rejection sampling')
 plt.xlabel('z, z_sampled')
 plt.ylabel('pdf(z), pdf(z_sampled)')
+plt.legend()
 plt.show()
 
 # =============================================================================
@@ -70,7 +72,11 @@ plt.show()
 #plot cumulativa
 ax = plt.gca()
 ax.plot(z_lin, z_dist.cdf(z_lin), label = 'cdf from rv.histogram')
-plt.hist(z, bins = 100, density = True, cumulative = True)
+plt.hist(z, bins = 100, density = True, cumulative = True, label = 'cdf from data')
+plt.title('Cumulative function for z')
+plt.xlabel('z')
+plt.ylabel('cdf(z)')
+plt.legend()
 plt.show()
 
 #interpolo cdf e icf
@@ -87,19 +93,30 @@ z_sample = interpolate.splev(Pz_cumulative, tck)
 ax = plt.gca()
 ax.plot(z_lin, z_dist.cdf(z_lin), label = 'cdf from rv.histogram')
 plt.plot(tck[1], tck[0], label = 'cdf from interpolation') 
+plt.title('Inverse cumulative function for z')
+plt.xlabel('z')
+plt.ylabel('ppf(z)')
+plt.legend()
 plt.show()
 
 #plot inverse cumulative function - confronto interpolazione/rv.histogram
 ax = plt.gca()
 ax.plot(z_lin, z_dist.ppf(z_lin), label='icf from rv.histogram')
 plt.plot(Pz_cumulative, z_sample, label='icf from interpolation')
+plt.title('Comparison bewteen histogram method and interpolation for ppf(z)')
+plt.xlabel('z')
+plt.ylabel('ppf(z)')
 plt.legend()
 plt.show()
 
 #plot istogramma dei nuovi redshift e confronto con pdf distribuzione iniziale (dai dati e da rv.histogram)
-plt.hist(z_sample, bins = 100, density = True)
-plt.plot(z_sample, z_dist.pdf(z_sample))
-plt.hist(z, bins = 100, density = True, histtype='step',color='green')
+plt.hist(z_sample, bins = 100, density = True, label = 'sampled pdf(z)')
+plt.plot(z_sample, z_dist.pdf(z_sample), label = 'pdf(z) from rv.histogram')
+plt.hist(z, bins = 100, density = True, histtype='step',color='green', label='data')
+plt.title('Comparison bewteen data and samples from inverse transform sampling')
+plt.xlabel('z')
+plt.ylabel('pdf(z)')
+plt.legend()
 plt.show()
 
 #tentativo di ricavare la distribuzione delle quasar
@@ -108,5 +125,9 @@ cosmo = astropy.cosmology.Planck18
 distribution = cosmo.differential_comoving_volume(z_lin).value
 distribution = distribution/(sum(distribution))
 
-plt.hist(z, bins = 100, density = True)
-plt.plot(z_lin, 1e4/2*distribution)
+plt.hist(z, bins = 100, density = True, label = 'observed pdf(z)')
+plt.plot(z_lin, 1e4/2*distribution, label = 'Theorethical pdf(z)')
+plt.xlabel('z')
+plt.ylabel('pdf(z)')
+plt.title('Comparison between theorethical and observed pdf(z)')
+plt.legend()
