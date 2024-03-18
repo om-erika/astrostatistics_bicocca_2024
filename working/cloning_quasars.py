@@ -29,7 +29,7 @@ z_lin = np.linspace(min(z), max(z), 10000)
 ax = plt.gca()
 plt.hist(z, bins = 100, density = True)
 ax.plot(z_lin, z_dist.pdf(z_lin))
-plt.title('Istogramma z')
+plt.title('z histogram')
 plt.xlabel('z')
 plt.ylabel('pdf(z)')
 plt.show()
@@ -46,6 +46,7 @@ plt.scatter(x[y>z_dist.pdf(x)],y[y>z_dist.pdf(x)], s = 0.9, label = 'discarded')
 plt.title('Rejection sampling visualization')
 plt.xlabel('x')
 plt.ylabel('y')
+plt.legend(loc = 'upper right')
 plt.show()
 
 #scelta dei punti validi e confronto con distribuzione iniziale
@@ -54,6 +55,9 @@ ax = plt.gca()
 plt.hist(z, bins = 100, density = True)
 ax.plot(z_lin, z_dist.pdf(z_lin))
 plt.hist(goodpoints,bins=100,density=True,histtype='step', color = 'green')
+plt.title('Comparison between data and sampling')
+plt.xlabel('z, z_sampled')
+plt.ylabel('pdf(z), pdf(z_sampled)')
 plt.show()
 
 # =============================================================================
@@ -101,7 +105,7 @@ plt.show()
 #tentativo di ricavare la distribuzione delle quasar
 cosmo = astropy.cosmology.Planck18
 #uso il differential comoving volume perché mi serve il dv, non tutto il volume sotteso
-distribution = 4*np.pi*cosmo.differential_comoving_volume(z_lin).value
+distribution = cosmo.differential_comoving_volume(z_lin).value
 distribution = distribution/(sum(distribution))
 
 plt.hist(z, bins = 100, density = True)
