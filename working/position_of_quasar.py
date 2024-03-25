@@ -16,7 +16,7 @@ from scipy.stats import norm
 
 mean = 1
 sigma = 0.2
-N = 4
+N = 5
 gaussian = scipy.stats.norm(loc = mean, scale = sigma)
 ax = plt.gca()
 x = scipy.stats.norm.rvs(loc = mean, scale = sigma, size = N)
@@ -30,8 +30,10 @@ plt.show()
 
 tot_likelihood = 1
 
+#choose if homodastic or heterodastic errors 
 sigma_x = np.full(N, sigma)
-sigma_x = np.abs(scipy.stats.norm.rvs(loc = 0.2, scale = 0.5, size = N))
+#sigma_x = np.abs(scipy.stats.norm.rvs(loc = 0.2, scale = 0.5, size = N))
+
 for value, sigma_value in zip(x,sigma_x):
     ax = plt.gca()
     gauss = scipy.stats.norm(loc = value, scale = sigma_value)
@@ -65,6 +67,6 @@ plt.show()
 MLE_mean = sum(x/sigma_x**2)/sum(1/sigma_x**2)
 print('Comparison between max of the likelihood and MLE estimator: %.02f, %.02f' % (findmax, MLE_mean))
 
-fisher = np.sqrt(np.diff(tot_likelihood,2)[np.argmax(tot_likelihood)]/(x[N-1]-x[0])**2*(-1))
+fisher = 1/np.sqrt(- np.diff(tot_likelihood,n=2)[np.argmax(tot_likelihood)]/(x_lin[1]-x_lin[0])**2)
 MLE_fisher = sum(1/sigma_x**2)**(-1/2)
 print('Comparison between fisher matrix and MLE estimator: %.02f, %.02f' %(fisher, MLE_fisher))
