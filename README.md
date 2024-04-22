@@ -28,11 +28,11 @@ The use of statistics is ubiquitous in astronomy and astrophysics. Modern advanc
 9. [Bayesian Statistical Inference: II](lectures/L09_bayesian.ipynb) Parameter estimation examples (Gaussian data, background). Model comparison: odds ratio. Approximate model comparison.
 10. [Bayesian Statistical Inference: III](lectures/L10_bayesian.ipynb). Monte Carlo methods. Markov chains. Burn-in. Metropolis-Hastings algorithm.  *
 11. [Bayesian Statistical Inference: IV](lectures/L11_bayesian.ipynb). MCMC diagnostics. Traceplots. Autocorrelation lenght. Samplers in practice: emcee and PyMC3. Gibbs sampling. Conjugate priors.  *
-12. [Bayesian Statistical Inference: V](lectures/L12_bayesian.ipynb). Evidence evaluation. Model selection. Nested sampling. Samplers in practice: dynesty. * 
+12. [Bayesian Statistical Inference: V](lectures/L12_bayesian.ipynb). Evidence evaluation. Model selection. Savage-Dickey density ratio. Nested sampling. Samplers in practice: dynesty. * 
 13. [Introduction II](lectures/L13_introduction.ipynb). Data mining and machine learning. Supervised and unsupervised learning. Overview of scikit-learn. Examples. *
 14. [Clustering](lectures/L14_clustering.ipynb). K-fold cross validation. Unsupervised clustering. K-Means Clustering. Mean-shift Clustering. Correlation functions. *
 15. [Dimensional Reduction I](lectures/L15_dimensionality.ipynb). Curse of dimensionality. Principal component analysis. Missing data. Non-negative matrix factorization. Independent component analysis. *
-16. [Dimensional Reduction II - Density estimation](lectures/L16_dimensionality.ipynb). Non-linear dimensional reduction. Locally linear embedding. Isometric mapping. t-distributed stochastic neighbor embedding. Data visualization. Recap of density estimation. KDE. Nearest-Neighbor. Gaussian Mixtures.
+16. [Dimensional Reduction II - Density estimation](lectures/L16_dimensionality.ipynb). Non-linear dimensional reduction. Locally linear embedding. Isometric mapping. t-SNE. Recap of density estimation. KDE. Nearest-Neighbor. Gaussian Mixtures. *Pills of modern research*
 17. [Regression I](lectures/L17_regression.ipynb). What is regression? Linear regression. Polynomial regression. Basis function regression. Kernel regression. Over/under fitting. Cross validation. Learning curves. *
 18. [Regression II](lectures/L18_regression.ipynb). Regularization. Ridge. LASSO. Non-linear regression. Gaussian process regression. Total least squares. *
 19. [Classification I](lectures/L19_classification.ipynb). Generative vs discriminative classification. Receiver Operating Characteristic (ROC) curve. Naive Bayes. Gaussian naive Bayes. Linear and quadratic discriminant analysis. GMM Bayes classification. K-nearest neighbor classifier. *
